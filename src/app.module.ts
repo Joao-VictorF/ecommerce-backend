@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './models/user/user.module';
 import { ProductModule } from './models/product/product.module';
 import { CategoryModule } from './models/category/category.module';
+import { PurchaseModule } from './models/purchase/purchase.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CategoryModule } from './models/category/category.module';
     UserModule,
     ProductModule,
     CategoryModule,
+    PurchaseModule,
   ],
   providers: [
     {
