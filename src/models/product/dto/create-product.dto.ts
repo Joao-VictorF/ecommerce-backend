@@ -59,6 +59,14 @@ export class CreateProductDto extends OmitType(Product, [
   description?: string;
 
   /**
+   * Product picture
+   * @example "https://http2.mlstatic.com/D_NQ_NP_2X_945889-MLB46671431111_072021-F.webp"
+   */
+  @IsString()
+  @IsOptional()
+  picture?: string;
+
+  /**
    * Category IDs
    * @example ["857cd575-956b-49f3-a75e-2e651e21b871", "fa244865-0878-4688-ac63-e3ecf4939a89"]
    */
