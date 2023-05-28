@@ -163,15 +163,6 @@ describe('PurchaseService', () => {
       expect(prismaService.purchase.findMany).toHaveBeenCalled();
     });
 
-    it('should find all purchases with custom pagination', async () => {
-      const purchases = await purchaseService.findAll({ page: 3, offset: 20 });
-
-      expect(purchases).toEqual(purchaseArray);
-      expect(prismaService.purchase.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({ skip: 40, take: 20 }),
-      );
-    });
-
     it('should find all purchases filtering by user ID and product ID', async () => {
       await purchaseService.findAll({
         userId: user1Id,

@@ -43,17 +43,8 @@ export class PurchaseService {
    * Default is starting on page 1 showing 10 results per page
    * and ordering by name
    */
-  async findAll({
-    userId,
-    productId,
-    page = 1,
-    offset = 10,
-  }: FindPurchasesDto): Promise<Purchase[]> {
-    const purchasesToSkip = (page - 1) * offset;
-
+  async findAll({ userId, productId }: FindPurchasesDto): Promise<Purchase[]> {
     const purchases = await this.prisma.purchase.findMany({
-      skip: purchasesToSkip,
-      take: offset,
       where: {
         userId: { equals: userId },
         productId: { equals: productId },

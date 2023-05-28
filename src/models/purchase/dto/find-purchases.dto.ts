@@ -1,5 +1,4 @@
-import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsPositive, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 /** Describes the information to search for purchases */
 export class FindPurchasesDto {
