@@ -6,7 +6,7 @@ import { ExceptionInterceptor } from './common/interceptors/exception.intercepto
 
 /** Starts the application */
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   app.useGlobalPipes(
     new ValidationPipe({
