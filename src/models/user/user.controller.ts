@@ -48,11 +48,19 @@ export class UserController {
   /** Returns user's own profile information without password */
   @ApiOperation({ summary: "Gets user's own profile" })
   @ApiBearerAuth()
-  @Get()
+  @Get('profile')
   async findById(@Req() request: Request): Promise<UserWithoutPassword> {
     const userId = request.user['userId'];
 
     return this.userService.findById(userId);
+  }
+
+  /** Returns user's information without password */
+  @ApiOperation({ summary: "Gets user's own profile" })
+  @IsAdmin()
+  @Get()
+  async list(): Promise<Array<UserWithoutPassword>> {
+    return this.userService.list();
   }
 
   /** Updates user information */

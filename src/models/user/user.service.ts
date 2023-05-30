@@ -72,6 +72,26 @@ export class UserService {
     return { ...user };
   }
 
+  /** Finds user by id and returns the user without password.
+   * Used for default in app requests where the hashed password
+   * won't be compared
+   */
+  async list(): Promise<Array<UserWithoutPassword>> {
+    const users = await this.prisma.user.findMany({
+      select: {
+        id: true,
+        role: true,
+        email: true,
+        name: true,
+        address: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return users;
+  }
+
   /** Finds user by email and returns the user with password.
    * Used mainly in login to compare if the inputted password matches
    * the hashed one.
