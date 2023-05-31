@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserTokens } from '@prisma/client';
 
-import { LoginResponse } from './dto/login.response';
+import { LoginResponse, LoginWithoutUserResponse } from './dto/login.response';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/models/user/user.service';
 import { User } from 'src/models/user/entities/user.entity';
@@ -55,6 +55,7 @@ export class AuthService {
     return {
       accessToken,
       refreshToken,
+      user,
     };
   }
 
@@ -62,7 +63,7 @@ export class AuthService {
   async refreshToken(
     refreshToken: string,
     browserInfo?: string,
-  ): Promise<LoginResponse> {
+  ): Promise<LoginWithoutUserResponse> {
     const refreshTokenContent: RefreshTokenPayload =
       await this.jwtService.verifyAsync(refreshToken, refreshJwtConfig);
 

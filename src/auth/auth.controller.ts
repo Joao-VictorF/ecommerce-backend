@@ -12,7 +12,7 @@ import { UserTokens } from '@prisma/client';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
-import { LoginResponse } from './dto/login.response';
+import { LoginResponse, LoginWithoutUserResponse } from './dto/login.response';
 import { LogoutDto } from './dto/logout.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { Public } from './public.decorator';
@@ -49,7 +49,7 @@ export class AuthController {
   async refreshToken(
     @Body() { refreshToken }: RefreshTokenDto,
     @Req() request: Request,
-  ): Promise<LoginResponse> {
+  ): Promise<LoginWithoutUserResponse> {
     const browserInfo =
       `${request.ip} ${request.headers['user-agent']} ${request.headers['accept-language']}`.replace(
         / undefined/g,
