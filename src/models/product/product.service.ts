@@ -52,7 +52,7 @@ export class ProductService {
         name: { contains: productName, mode: 'insensitive' },
       },
       orderBy: { name: 'asc' },
-      include: { categories: { select: { name: true } } },
+      include: { categories: { select: { id: true, name: true } } },
     });
   }
 
@@ -83,9 +83,12 @@ export class ProductService {
       return this.updateProductAndUrlName(id, updateProductDto);
     }
 
+    const categories = this.connectCategoriesById(updateProductDto.categories);
+
     return this.prisma.product.update({
       where: { id },
-      data: { ...updateProductDto },
+      data: { ...updateProductDto, categories },
+      include: { categories: { select: { id: true, name: true } } },
     });
   }
 
@@ -121,9 +124,12 @@ export class ProductService {
   ): Promise<Product> {
     const urlName = this.formatUrlName(updateProductDto.name);
 
+    const categories = this.connectCategoriesById(updateProductDto.categories);
+
     return this.prisma.product.update({
       where: { id },
-      data: { ...updateProductDto, urlName },
+      data: { ...updateProductDto, urlName, categories },
+      include: { categories: { select: { id: true, name: true } } },
     });
   }
 
