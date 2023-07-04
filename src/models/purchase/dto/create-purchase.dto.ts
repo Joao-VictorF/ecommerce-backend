@@ -1,24 +1,29 @@
-import { PickType } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsPositive, IsUUID } from 'class-validator';
-import { Purchase } from '../entities/purchase.entity';
+import {
+  IsArray,
+  ValidateNested,
+  IsNumber,
+  IsString,
+  IsNotEmpty,
+  IsPositive,
+} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 
 /** Describes the fields needed to create a Purchase */
-export class CreatePurchaseDto extends PickType(Purchase, [
-  'productId',
-  'amount',
-]) {
-  /** Product ID as UUID
-   * @example "5c68ae94-bf3e-4fde-b01f-25d18b3976a0"
-   */
-  @IsUUID(4)
+export class CreatePurchaseDto {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ProductAmountDto)
+  @Transform(({ value }) => value ?? [], { toClassOnly: true }) // Transform undefined to an empty array
+  products: ProductAmountDto[];
+}
+
+export class ProductAmountDto {
+  @IsString()
+  @IsNotEmpty()
   productId: string;
 
-  /** Amount purchased of the product
-   * Defaults to 1
-   * @example 2
-   */
   @IsNumber()
   @IsPositive()
-  @IsOptional()
-  amount: number;
+  @IsNotEmpty()
+  amount?: number;
 }

@@ -16,7 +16,6 @@ import { Request } from 'express';
 import { IsAdmin } from 'src/common/decorators/is-admin.decorator';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
 import { FindPurchasesDto } from './dto/find-purchases.dto';
-import { ReviewPurchaseDto } from './dto/review-purchase.dto';
 import { UpdatePurchaseDto } from './dto/update-purchase.dto';
 import { Purchase } from './entities/purchase.entity';
 import { PurchaseService } from './purchase.service';
@@ -94,30 +93,16 @@ export class PurchaseController {
     return this.purchaseService.findOne(purchaseId, userId, userRole);
   }
 
-  /** Reviews purchased product, must be purchase owner */
-  @ApiOperation({ summary: 'Reviews purchased product' })
-  @ApiBearerAuth()
-  @Patch('/review/:id')
-  async review(
-    @Req() request: Request,
-    @Param('id') purchaseId: string,
-    @Body() reviewPurchaseDto: ReviewPurchaseDto,
-  ): Promise<Purchase> {
-    const { userId } = request.user as { userId: string };
-
-    return this.purchaseService.review(userId, purchaseId, reviewPurchaseDto);
-  }
-
-  /** Updates purchase information, only for admins */
-  @ApiOperation({ summary: 'Admin updates purchase' })
-  @IsAdmin()
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updatePurchaseDto: UpdatePurchaseDto,
-  ): Promise<Purchase> {
-    return this.purchaseService.update(id, updatePurchaseDto);
-  }
+  // /** Updates purchase information, only for admins */
+  // @ApiOperation({ summary: 'Admin updates purchase' })
+  // @IsAdmin()
+  // @Patch(':id')
+  // async update(
+  //   @Param('id') id: string,
+  //   @Body() updatePurchaseDto: UpdatePurchaseDto,
+  // ): Promise<Purchase> {
+  //   return this.purchaseService.update(id, updatePurchaseDto);
+  // }
 
   /** Deletes purchase from database, only for admins */
   @ApiOperation({ summary: 'Admin deletes purchase' })

@@ -224,40 +224,6 @@ describe('PurchaseService', () => {
     });
   });
 
-  describe('review', () => {
-    it('should review purchased product', async () => {
-      const purchase = await purchaseService.review(user1Id, purchase3Id, {
-        reviewNote: 5,
-        reviewComment: 'Amazing product!',
-      });
-
-      expect(purchase.id).toEqual(purchase3Id);
-      expect(purchase.reviewNote).toEqual(5);
-      expect(purchase.reviewComment).toEqual('Amazing product!');
-
-      expect(prismaService.purchase.findUnique).toBeCalledWith({
-        where: { id: purchase3Id },
-        rejectOnNotFound: true,
-      });
-
-      expect(prismaService.purchase.update).toBeCalledWith(
-        expect.objectContaining({
-          where: { id: purchase3Id },
-          data: { reviewNote: 5, reviewComment: 'Amazing product!' },
-        }),
-      );
-    });
-
-    it('should not review purchased product if user does not own the purchase', async () => {
-      await expect(
-        purchaseService.review(user2Id, purchase3Id, {
-          reviewNote: 1,
-          reviewComment: 'I do not own this purchase',
-        }),
-      ).rejects.toThrow(new NotPurchaseOwnerException());
-    });
-  });
-
   describe('update', () => {
     it('should update purchase', async () => {
       const purchase = await purchaseService.update(purchase2Id, {

@@ -36,17 +36,17 @@ model UserTokens {
 }
 
 model Product {
-  id                 String     @id @default(uuid())
-  name               String     @unique
-  urlName            String     @unique
+  id                 String         @id @default(uuid())
+  name               String         @unique
+  urlName            String         @unique
   picture            String?
   basePrice          Decimal
-  discountPercentage Int        @default(0)
-  stock              Int        @default(0)
+  discountPercentage Int            @default(0)
+  stock              Int            @default(0)
   description        String?
-  createdAt          DateTime   @default(now())
+  createdAt          DateTime       @default(now())
   categories         Category[]
-  Purchase           Purchase[]
+  PurchaseItem       PurchaseItem[]
 }
 
 model Category {
@@ -57,19 +57,22 @@ model Category {
 }
 
 model Purchase {
-  id String @id @default(uuid())
-
+  id     String  @id @default(uuid())
   user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId String?
 
-  product   Product @relation(fields: [productId], references: [id])
-  productId String
-
-  amount        Int      @default(1)
+  purchaseItems PurchaseItem[]
   totalPrice    Decimal
-  reviewNote    Int?
-  reviewComment String?
-  createdAt     DateTime @default(now())
+  createdAt     DateTime       @default(now())
+}
+
+model PurchaseItem {
+  id         String    @id @default(uuid())
+  product    Product   @relation(fields: [productId], references: [id])
+  productId  String
+  amount     Int
+  Purchase   Purchase? @relation(fields: [purchaseId], references: [id])
+  purchaseId String?
 }
 
 enum Role {
