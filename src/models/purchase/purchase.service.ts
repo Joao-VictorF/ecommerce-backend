@@ -33,6 +33,24 @@ export class PurchaseService {
         product: { connect: { id: product.productId } },
       }));
 
+    // Update the stock of each product
+    const updateStockPromises = createPurchaseDto.products.map(
+      async (product: ProductAmountDto) => {
+        const updatedProduct = await this.prisma.product.update({
+          where: { id: product.productId },
+          data: {
+            stock: {
+              decrement: product.amount ?? 1,
+            },
+          },
+        });
+        return updatedProduct;
+      },
+    );
+
+    // Execute the stock update promises
+    await Promise.all(updateStockPromises);
+
     // Create a new purchase
     const purchase = await this.prisma.purchase.create({
       data: {
@@ -130,13 +148,14 @@ export class PurchaseService {
     createPurchaseDto: CreatePurchaseDto,
   ): Promise<number> {
     let totalPrice = 0;
-    for (const product of createPurchaseDto.products) {
-      const { basePrice } = await this.prisma.product.findUnique({
-        where: { id: product.productId },
+    for (const purchaseProduct of createPurchaseDto.products) {
+      const product = await this.prisma.product.findUnique({
+        where: { id: purchaseProduct.productId },
       });
-      console.log(basePrice);
-      const totalProductPrice = currency(basePrice.toNumber()).multiply(
-        product.amount,
+      console.log(product);
+      console.log(purchaseProduct.productId);
+      const totalProductPrice = currency(product.basePrice.toNumber()).multiply(
+        purchaseProduct.amount,
       );
       totalPrice = totalPrice + totalProductPrice.value;
     }

@@ -50,6 +50,7 @@ export class ProductService {
     return this.prisma.product.findMany({
       where: {
         name: { contains: productName, mode: 'insensitive' },
+        stock: { gt: 0 },
       },
       orderBy: { name: 'asc' },
       include: { categories: { select: { id: true, name: true } } },
